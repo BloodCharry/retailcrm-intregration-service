@@ -1,0 +1,68 @@
+# Python
+pycache/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.log
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pkl
+
+# Poetry
+poetry.lock
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# dotenv
+.env
+.env.*
+
+# VS Code
+.vscode/
+
+# Pytest
+.cache/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+
+# Ruff
+ruff_cache/
+
+# Coverage
+.coverage
+htmlcov/
+coverage.xml
+
+# Docker
+*.pid
+*.db
+*.sqlite3
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Build
+build/
+dist/
+*.egg
+.eggs/
+MANIFEST
+
+# IDEs
+.idea/
+*.iml
+/.ruff_cache/
