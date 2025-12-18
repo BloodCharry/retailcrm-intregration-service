@@ -1,32 +1,28 @@
-[project]
+[tool.poetry]
 name = "retailcrm-integration-service"
 version = "0.1.0"
 description = "REST API service for integration with RetailCRM with basic operations on customers and orders"
-authors = [
-    { name = "BloodCharry", email = "vladvorobei1994@gmail.com" }
-]
+authors = ["BloodCharry <vladvorobei1994@gmail.com>"]
 readme = "README.md"
-requires-python = ">=3.11"
+package-mode = false
 
-dependencies = [
-    "fastapi>=0.125.0,<0.126.0",
-    "httpx>=0.28.1,<0.29.0",
-    "uvicorn>=0.38.0,<0.39.0",
-    "python-dotenv>=1.2.1,<2.0.0",
-]
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+fastapi = "^0.125.0"
+httpx = "^0.28.1"
+uvicorn = "^0.38.0"
+python-dotenv = "^1.2.1"
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=9.0.2,<10.0.0",
-    "pytest-asyncio>=1.3.0,<2.0.0",
-    "ruff>=0.14.9,<0.15.0",
-    "black>=25.12.0,<26.0.0",
-    "mypy>=1.19.1,<2.0.0",
-    "pre-commit>=4.5.1,<5.0.0",
-]
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.2"
+pytest-asyncio = "^1.3.0"
+ruff = "^0.14.9"
+black = "^25.12.0"
+mypy = "^1.19.1"
+pre-commit = "^4.5.1"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
@@ -40,7 +36,6 @@ target-version = "py311"
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
 ignore = ["E501"]
-
 
 [tool.mypy]
 python_version = "3.11"
