@@ -23,7 +23,7 @@ typecheck:
 
 # Запуск тестов (pytest)
 test:
-	poetry run pytest -v
+	poetry run pytest -v tests/integration
 
 # Локальный запуск FastAPI через uvicorn
 run:

@@ -1,5 +1,6 @@
 from fastapi import Depends, FastAPI
 
+from contextlib import asynccontextmanager
 from app.core.logging import logger, setup_logging
 from app.core.middleware import LoggingMiddleware
 from app.core.request_id import RequestIDMiddleware
@@ -7,9 +8,16 @@ from app.core.security import get_api_key
 
 setup_logging()
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+
+
 app = FastAPI(
     title="RetailCRM Integration Service",
-    version="0.1.0",
+    lifespan=lifespan
+
 )
 
 # Middleware
