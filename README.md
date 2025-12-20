@@ -127,17 +127,63 @@ make test
 make run
 ```
 
-### Структура проекта
+## API эндпоинты
 
-#### app/core — конфигурация, безопасность, middleware, логирование
+| Метод | Путь                        | Назначение                                                   |
+|-------|-----------------------------|--------------------------------------------------------------|
+| GET   | /api/v1/customers           | Получение списка клиентов (фильтры: name, email, registered_from/to) |
+| POST  | /api/v1/customers           | Создание нового клиента                                      |
+| GET   | /api/v1/customers/{id}/orders | Получение заказов клиента                                   |
+| POST  | /api/v1/orders              | Создание нового заказа                                       |
+| POST  | /api/v1/payments            | Создание и привязка платежа к заказу                        |
+| GET   | /health                     | Health-check                                                 |
 
-##### app/main.py — точка входа FastAPI
 
-##### tests/ — тесты (pytest + pytest-asyncio)
+## Примеры curl
+```bash
+# Получение списка клиентов
+curl -H "X-API-KEY: $API_KEY" http://localhost:8000/api/v1/customers
 
-##### .pre-commit-config.yaml — хуки для форматирования, линтинга и проверки типов
+# Создание клиента
+curl -X POST http://localhost:8000/api/v1/customers \
+  -H "X-API-KEY: $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"firstName": "Иван", "email": "ivan@example.com", "phone": "+79991234567"}'
 
-##### Makefile — удобные команды для локальной разработки
+# Получение заказов клиента
+curl -H "X-API-KEY: $API_KEY" http://localhost:8000/api/v1/customers/123/orders
+```
+
+## Swagger / OpenAPI
+**Документация доступна автоматически:**
+
+- Swagger UI: http://localhost:8000/docs
+- OpenAPI JSON: http://localhost:8000/openapi.json
+
+## Переменные окружения (.env)
+
+- RETAILCRM_API_KEY — API ключ RetailCRM
+- RETAILCRM_BASE_URL — базовый URL API (например https://demo.retailcrm.ru/api/v5)
+- RETAILCRM_SITE — код сайта в RetailCRM
+- TEST_OFFER_ID — ID тестового товара для интеграционных тестов
+
+### Архитектура проекта
+
+- app/core — конфигурация, логирование, middleware, безопасность
+- app/crm — клиент RetailCRM (httpx + логирование)
+- app/services — бизнес-логика (customers, orders, payments)
+- app/schemas — Pydantic-модели для API
+- app/api/v1/routers — FastAPI роутеры
+- tests/ — unit + integration тесты
+
+## Наблюдаемость
+- Логи в JSON через structlog
+- Request ID в каждом запросе (X-Request-ID)
+- Health-check доступен по /health
+
+## Безопасность
+- Все эндпоинты защищены заголовком X-API-KEY
+- Ошибки RetailCRM логируются с деталями запроса/ответа
 
 ##### Полезные ссылки:
 

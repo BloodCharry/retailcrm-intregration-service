@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI
 
+from app.api.v1.routers import customers, orders, payments
 from app.core.logging import logger, setup_logging
 from app.core.middleware import LoggingMiddleware
 from app.core.request_id import RequestIDMiddleware
@@ -21,6 +22,10 @@ app = FastAPI(title="RetailCRM Integration Service", lifespan=lifespan)
 # Middleware
 app.add_middleware(RequestIDMiddleware)
 app.add_middleware(LoggingMiddleware)
+
+app.include_router(customers.router, prefix="/api/v1", tags=["customers"])
+app.include_router(orders.router, prefix="/api/v1", tags=["orders"])
+app.include_router(payments.router, prefix="/api/v1", tags=["payments"])
 
 
 @app.get("/health", dependencies=[Depends(get_api_key)])
