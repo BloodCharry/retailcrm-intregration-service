@@ -16,6 +16,10 @@ REST API сервис для интеграции с RetailCRM (API v5) с ба�
 
 [Запуск в Docker](README.md#запуск-в-docker)
 
+### Примечание: 
+**для docker настроено прооксирование через nginx, все эндпоинты доступны по адресу http://localhost**
+
+
 ## Установка и запуск локально (без Makefile)
 
 ```bash
@@ -138,8 +142,11 @@ make run
 | POST  | /api/v1/payments            | Создание и привязка платежа к заказу                        |
 | GET   | /health                     | Health-check                                                 |
 
+**Важно:** при проверке эндпоинта `/api/v1/payments` необходимо указывать реально существующий идентификатор заказа (`order.id`, `order.externalId` или `order.number`).  
+Если указать несуществующий ID, RetailCRM вернёт ошибку `400 Bad Request` с сообщением `"Order with {id: ...} does not exist."`.
 
 ## Примеры curl
+
 ```bash
 # Получение списка клиентов
 curl -H "X-API-KEY: $API_KEY" http://localhost:8000/api/v1/customers
@@ -152,6 +159,43 @@ curl -X POST http://localhost:8000/api/v1/customers \
 
 # Получение заказов клиента
 curl -H "X-API-KEY: $API_KEY" http://localhost:8000/api/v1/customers/123/orders
+
+# Создание нового заказа
+curl -X POST http://localhost:8000/api/v1/orders \
+  -H "X-API-KEY: $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "number": "ORD-001",
+    "customer_id": 123,
+    "items": [
+      {"offer_id": 1, "quantity": 2, "price": "99.99"}
+    ]
+  }'
+  
+# Создание и привязка платежа к заказу
+curl -X POST http://localhost:8000/api/v1/payments \
+  -H "X-API-KEY: $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": "99.99",
+    "type": "bank-card",
+    "order": { "id": 456 }
+  }'
+
+# фильтрация по имени
+curl -G -H "X-API-KEY: $API_KEY" \
+  --data-urlencode "filter[firstName]=Иван" \
+  http://localhost:8000/api/v1/customers
+
+
+# фильтрация по email
+curl -H "X-API-KEY: $API_KEY" \
+  "http://localhost/api/v1/customers?filter%5Bemail%5D=alice@example.com"
+
+# фильтрация по диапазону дат
+curl -H "X-API-KEY: $API_KEY" \
+  "http://localhost/api/v1/customers?filter%5BcreatedAtFrom%5D=2025-01-01&filter%5BcreatedAtTo%5D=2025-12-31"
+
 ```
 
 ## Swagger / OpenAPI

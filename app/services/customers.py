@@ -11,7 +11,9 @@ class CustomerService:
     async def list_customers(
         self, filters: dict[str, Any], page: int, limit: int
     ) -> dict[str, Any]:
+        """Получение списка клиентов с фильтрацией."""
         return await self.crm.list_customers(filters, page, limit)
 
     async def create_customer(self, data: CustomerCreate) -> dict[str, Any]:
-        return await self.crm.create_customer(data.model_dump())
+        """Создание нового клиента."""
+        return await self.crm.create_customer(data.model_dump(mode="json"))

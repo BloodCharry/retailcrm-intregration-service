@@ -111,5 +111,6 @@ class RetailCRMClient:
         return await self._request("POST", "orders/create", data=payload)
 
     async def create_payment(self, payment: dict[str, Any]) -> dict[str, Any]:
-        payload = {"payment": json.dumps(payment)}
+        payload = {"payment": json.dumps(payment, ensure_ascii=False)}
+        logger.info("retailcrm_payload", payload=payload["payment"])
         return await self._request("POST", "orders/payments/create", data=payload)

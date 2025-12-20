@@ -14,4 +14,4 @@ class OrderService:
         return await self.crm.list_orders(filters, page, limit)
 
     async def create_order(self, data: OrderCreate) -> dict[str, Any]:
-        return await self.crm.create_order(data.model_dump())
+        return await self.crm.create_order(data.model_dump(mode="json"))

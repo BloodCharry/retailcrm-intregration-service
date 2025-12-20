@@ -9,4 +9,9 @@ class PaymentService:
         self.crm = crm
 
     async def create_payment(self, data: PaymentCreate) -> dict[str, Any]:
-        return await self.crm.create_payment(data.model_dump())
+        payload = {
+            "amount": str(data.amount),
+            "type": data.type,
+            "order": {"id": data.order_id},
+        }
+        return await self.crm.create_payment(payload)

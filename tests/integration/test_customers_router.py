@@ -32,3 +32,17 @@ def test_create_customer_endpoint(monkeypatch):
     data = response.json()
     assert data["firstName"] == "Bob"
     assert data["email"] == "bob@example.com"
+
+
+def test_list_customer_orders_endpoint(monkeypatch):
+    async def fake_list_orders(self, filters, page, limit):
+        return {"orders": [{"id": 10, "number": "ORD-001"}]}
+
+    from app.services import orders
+    monkeypatch.setattr(orders.OrderService, "list_orders", fake_list_orders)
+
+    response = client.get("/api/v1/customers/123/orders", headers={"X-API-KEY": "test"})
+    assert response.status_code == 200
+    data = response.json()
+    assert "orders" in data
+    assert data["orders"][0]["number"] == "ORD-001"

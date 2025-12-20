@@ -1,14 +1,7 @@
 import pytest
 from app.services.customers import CustomerService
 from app.schemas.customers import CustomerCreate
-
-
-class DummyCRM:
-    async def list_customers(self, filters, page, limit):
-        return {"ok": True, "filters": filters, "page": page, "limit": limit}
-
-    async def create_customer(self, data):
-        return {"ok": True, "customer": data}
+from tests.dummies import DummyCRM
 
 
 @pytest.mark.asyncio
