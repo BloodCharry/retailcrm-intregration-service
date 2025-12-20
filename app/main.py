@@ -9,6 +9,9 @@ from app.core.middleware import LoggingMiddleware
 from app.core.request_id import RequestIDMiddleware
 from app.core.security import get_api_key
 
+from prometheus_fastapi_instrumentator import Instrumentator
+
+
 setup_logging()
 
 
@@ -19,10 +22,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(title="RetailCRM Integration Service", lifespan=lifespan)
 
+# метрики
+Instrumentator().instrument(app).expose(app)
+
 # Middleware
 app.add_middleware(RequestIDMiddleware)
 app.add_middleware(LoggingMiddleware)
 
+# Routers
 app.include_router(customers.router, prefix="/api/v1", tags=["customers"])
 app.include_router(orders.router, prefix="/api/v1", tags=["orders"])
 app.include_router(payments.router, prefix="/api/v1", tags=["payments"])

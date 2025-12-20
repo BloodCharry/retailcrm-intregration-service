@@ -69,6 +69,16 @@ http://localhost:8000
 ```bash
 docker-compose up --build
 ```
+#### После запуска все сервисы доступны через Nginx по адресу http://localhost:
+
+- API эндпоинты: http://localhost/api/v1/...
+- Документация Swagger: http://localhost/docs
+- Health-check: http://localhost/healthz
+
+#### Метрики FastAPI (Prometheus формат): http://localhost/metrics
+- Prometheus UI: http://localhost/prometheus/
+- Grafana UI: http://localhost/grafana/
+- После `docker-compose up` дождитесь, пока контейнер `grafana` завершит миграции и станет доступен по адресу http://localhost/grafana/.
 
 ## Тестирование
 
@@ -204,12 +214,19 @@ curl -H "X-API-KEY: $API_KEY" \
 - Swagger UI: http://localhost:8000/docs
 - OpenAPI JSON: http://localhost:8000/openapi.json
 
-## Переменные окружения (.env)
+## Переменные окружения (.env) смотрите пример .env.example
 
 - RETAILCRM_API_KEY — API ключ RetailCRM
 - RETAILCRM_BASE_URL — базовый URL API (например https://demo.retailcrm.ru/api/v5)
 - RETAILCRM_SITE — код сайта в RetailCRM
 - TEST_OFFER_ID — ID тестового товара для интеграционных тестов
+- PROMETHEUS_PORT=9090
+- GRAFANA_PORT=3000
+- GRAFANA_ADMIN_USER=admin
+- GRAFANA_ADMIN_PASSWORD=admin
+- GRAFANA_LOG_LEVEL=warn
+- GRAFANA_ANONYMOUS_ENABLED=true
+- GRAFANA_ANONYMOUS_ROLE=Admin
 
 ### Архитектура проекта
 
