@@ -1,6 +1,8 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import Depends, FastAPI
 
-from contextlib import asynccontextmanager
 from app.core.logging import logger, setup_logging
 from app.core.middleware import LoggingMiddleware
 from app.core.request_id import RequestIDMiddleware
@@ -10,15 +12,11 @@ setup_logging()
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     yield
 
 
-app = FastAPI(
-    title="RetailCRM Integration Service",
-    lifespan=lifespan
-
-)
+app = FastAPI(title="RetailCRM Integration Service", lifespan=lifespan)
 
 # Middleware
 app.add_middleware(RequestIDMiddleware)

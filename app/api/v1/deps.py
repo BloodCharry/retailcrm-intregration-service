@@ -1,7 +1,9 @@
 from typing import Annotated
+
 from fastapi import Depends
-from app.crm.client import RetailCRMClient
+
 from app.core.config import settings
+from app.crm.client import RetailCRMClient
 
 
 def get_crm_client() -> RetailCRMClient:

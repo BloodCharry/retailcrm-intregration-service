@@ -8,23 +8,24 @@ install:
 precommit:
 	poetry run pre-commit run --all-files
 
-# Линтинг (ruff)
+# Линтинг
 lint:
 	poetry run ruff check app
 
-# Автоформатирование (black + ruff --fix)
+# Автоформатирование
 format:
 	poetry run black app
 	poetry run ruff check app --fix
 
-# Проверка типов (mypy)
+# Проверка типов
 typecheck:
 	poetry run mypy app
 
-# Запуск тестов (pytest)
+# Запуск тестов
 test:
+	poetry run pytest -v tests/unit
 	poetry run pytest -v tests/integration
 
-# Локальный запуск FastAPI через uvicorn
+# Локальный запуск FastAPI
 run:
 	poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
