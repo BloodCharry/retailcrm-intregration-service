@@ -73,7 +73,7 @@ docker-compose up --build
 
 - API эндпоинты: http://localhost/api/v1/...
 - Документация Swagger: http://localhost/docs
-- Документация Docusaurus: http://localhost/api
+- Документация Docusaurus: http://localhost/docs-site/api
 - Health-check: http://localhost/healthz
 
 #### Метрики FastAPI (Prometheus формат): http://localhost/metrics
