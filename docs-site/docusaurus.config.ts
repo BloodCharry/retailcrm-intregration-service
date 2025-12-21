@@ -10,9 +10,12 @@ const config: Config = {
   future: {
     v4: true,
   },
-
-  url: 'http://localhost:3001',
-  baseUrl: '/',
+  // для локального запуска
+  // url: 'http://localhost:3001',
+  // baseUrl: '/',
+  // для docker-compose
+  url: 'http://localhost',
+  baseUrl: '/docs-site/',
 
   organizationName: 'your-org',
   projectName: 'retailcrm-intregration-service',
@@ -36,7 +39,10 @@ const config: Config = {
       specs: [
         {
           id: 'retailcrm-api',
-          spec: 'http://127.0.0.1:8000/openapi.json',
+          // для локального запуска
+          // spec: 'http://127.0.0.1:8000/openapi.json',
+          // для docker-compose.yml
+          spec: './static/openapi.json',
           route: '/api',
         },
       ],

@@ -73,6 +73,7 @@ docker-compose up --build
 
 - API эндпоинты: http://localhost/api/v1/...
 - Документация Swagger: http://localhost/docs
+- Документация Docusaurus: http://localhost/api
 - Health-check: http://localhost/healthz
 
 #### Метрики FastAPI (Prometheus формат): http://localhost/metrics
@@ -82,6 +83,11 @@ docker-compose up --build
 **После `docker-compose up` дождитесь, пока контейнер `grafana` завершит миграции и станет доступен по адресу http://localhost/grafana/.**
 
 ## Дополнительно: Документация через Docusaurus (опционально)
+
+### для использования локально Docusaurus нужно перейти к файлу 
+`docs-site/docusaurus.config.ts` и раскомментировать локальный запуск предварительно 
+закомментировать запуск для docker-compose, также в файле `docs-site/package.json` 
+заменить значение `"serve"` на `"docusaurus serve --port 3001"`
 ### Установка 
 ```bash
 cd docs-site
@@ -226,8 +232,9 @@ curl -H "X-API-KEY: $API_KEY" \
 
 - Swagger UI: http://localhost:8000/docs
 - OpenAPI JSON: http://localhost:8000/openapi.json
+- Docusaurus + Redocusaurus: http://localhost:3001/api
 
-## Переменные окружения (.env) смотрите пример .env.example
+### Переменные окружения (.env) смотрите пример .env.example
 
 - RETAILCRM_API_KEY — API ключ RetailCRM
 - RETAILCRM_BASE_URL — базовый URL API (например https://demo.retailcrm.ru/api/v5)
@@ -243,12 +250,38 @@ curl -H "X-API-KEY: $API_KEY" \
 
 ### Архитектура проекта
 
-- app/core — конфигурация, логирование, middleware, безопасность
-- app/crm — клиент RetailCRM (httpx + логирование)
-- app/services — бизнес-логика (customers, orders, payments)
-- app/schemas — Pydantic-модели для API
-- app/api/v1/routers — FastAPI роутеры
-- tests/ — unit + integration тесты
+```text
+retailcrm-intregration-service/
+├── app/                  # Основное приложение FastAPI
+│   ├── api/              # REST API роутеры
+│   │   └── v1/           # Версия 1 API (customers, orders, payments)
+│   ├── core/             # Конфигурация, логирование, middleware, безопасность
+│   ├── crm/              # Клиент для RetailCRM (httpx + логирование)
+│   ├── schemas/          # Pydantic-модели для API
+│   ├── services/         # Бизнес-логика (customers, orders, payments)
+│   └── main.py           # Точка входа FastAPI
+│
+├── docker/               # Docker и Nginx конфигурации
+│   ├── app.Dockerfile    # Dockerfile для FastAPI
+│   ├── docs.Dockerfile   # Dockerfile для Docusaurus
+│   ├── nginx.conf        # Основной конфиг Nginx
+│   └── default.conf      # Проксирование сервисов через Nginx
+│
+├── docs-site/            # Docusaurus + Redocusaurus документация
+│   └── docusaurus.config.ts 
+│
+├── tests/                # Тесты
+│   ├── unit/             # Юнит-тесты
+│   ├── integration/      # Интеграционные тесты
+│   └── dummies.py        # Заглушки для тестов
+│
+├── docker-compose.yml    # Композиция сервисов (app, nginx, prometheus, grafana, docs)
+├── Makefile              # Удобные команды (lint, test, run и т.д.)
+├── pyproject.toml        # Зависимости Poetry
+├── poetry.lock
+├── prometheus.yml        # Конфиг Prometheus
+└── README.md             # Документация проекта
+```
 
 ## Наблюдаемость
 - Логи в JSON через structlog
@@ -259,6 +292,6 @@ curl -H "X-API-KEY: $API_KEY" \
 - Все эндпоинты защищены заголовком X-API-KEY
 - Ошибки RetailCRM логируются с деталями запроса/ответа
 
-##### Полезные ссылки:
+### Полезные ссылки:
 
 #### Документация по api Retailcrm: https://docs.retailcrm.ru/Developers/API/APIMethods

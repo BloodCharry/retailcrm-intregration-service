@@ -47,3 +47,13 @@ services:
     depends_on:
       - prometheus
     restart: unless-stopped
+
+  docs:
+    build:
+      context: .
+      dockerfile: docker/docs.Dockerfile
+    expose:
+      - "3001"
+    restart: unless-stopped
+    depends_on:
+      - app
