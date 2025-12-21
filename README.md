@@ -78,8 +78,20 @@ docker-compose up --build
 #### Метрики FastAPI (Prometheus формат): http://localhost/metrics
 - Prometheus UI: http://localhost/prometheus/
 - Grafana UI: http://localhost/grafana/
-- После `docker-compose up` дождитесь, пока контейнер `grafana` завершит миграции и станет доступен по адресу http://localhost/grafana/.
+- 
+**После `docker-compose up` дождитесь, пока контейнер `grafana` завершит миграции и станет доступен по адресу http://localhost/grafana/.**
 
+## Дополнительно: Документация через Docusaurus (опционально)
+### Установка 
+```bash
+cd docs-site
+npm install
+ ```
+### запуск документации 
+```bash
+npm run start
+```
+### документация будет доступна по адресу: http://localhost:3001/api
 ## Тестирование
 
 #### В проекте используются pytest и pytest-asyncio.
@@ -87,6 +99,7 @@ docker-compose up --build
 **Юнит-тесты** — проверяют отдельные функции и классы без обращения к внешним сервисам.
 
 **Интеграционные тесты** — выполняют реальные запросы к RetailCRM API.
+
 
 ### Для интеграционных тестов необходимо:
 
